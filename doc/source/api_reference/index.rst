@@ -1,19 +1,11 @@
-API Documentation
-=================
+API Reference
+=============
 
-Pour une documentation exhaustive de notre API, veuillez consulter les modules listés ci-dessous.
+This page contains auto-generated API reference documentation [#f1]_.
 
 .. toctree::
-   :maxdepth: 1
+   :titlesonly:
 
-   api_reference/vehicles/abstract_vehicle
-   api_reference/vehicles/car
-   api_reference/vehicles/motorcycle
-   api_reference/vehicles/truck
-   api_reference/vehicles/vehicle
-
-
-   See :func:`vehicles.car.honk` for more dropdown.
-
+   /api_reference/vehicles/index
 
 .. [#f1] Created with `sphinx-autoapi <https://github.com/readthedocs/sphinx-autoapi>`_
