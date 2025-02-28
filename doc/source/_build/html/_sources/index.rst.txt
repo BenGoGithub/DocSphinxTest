@@ -1,0 +1,32 @@
+Welcome to the Vehicle Documentation
+====================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   introduction
+   vehicles
+
+API Documentation
+=================
+
+.. automodule:: vehicles.vehicle
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: vehicles.truck
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: vehicles.motorcycle
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: vehicles.car
+   :members:
+   :undoc-members:
+   :show-inheritance:

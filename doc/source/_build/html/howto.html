@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to… &#8212; DocSphinxTest 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="how-to">
+<span id="howto"></span><h1>How to…<a class="headerlink" href="#how-to" title="Link to this heading">¶</a></h1>
+<section id="get-full-stereo-products">
+<span id="get-stereo-products"></span><h2>Get full stereo products<a class="headerlink" href="#get-full-stereo-products" title="Link to this heading">¶</a></h2>
+<section id="pleiades-spot-6-7-products-dinamis">
+<h3>Pléiades / SPOT 6-7 products (DINAMIS)<a class="headerlink" href="#pleiades-spot-6-7-products-dinamis" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://dinamis.data-terra.org/catalogue/">DINAMIS</a> is a platform that acquires and distributes satellite Earth imagery (Pléaides and Spot 6-7) for french and foreign institutional users under <a class="reference external" href="https://dinamis.data-terra.org/en/eligible-users/">specific subscription conditions</a>.</div>
+</div>
+</section>
+<section id="airbus-pleiades-neo-example-files">
+<h3>AIRBUS Pleiades NEO example files<a class="headerlink" href="#airbus-pleiades-neo-example-files" title="Link to this heading">¶</a></h3>
+<p>Example files are available here: <a class="reference external" href="https://intelligence.airbus.com/imagery/sample-imagery/pleiades-neo-tristereo-marseille/">https://intelligence.airbus.com/imagery/sample-imagery/pleiades-neo-tristereo-marseille/</a> (A form must be filled out to access the data).</p>
+</section>
+<section id="maxar-worldview-example-files">
+<span id="maxar-example-files"></span><h3>Maxar WorldView example files<a class="headerlink" href="#maxar-worldview-example-files" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">Example files are available on AWS S3 through the SpaceNet challenge here: <cite>s3://spacenet-dataset/Hosted-Datasets/MVS_dataset/WV3/PAN/</cite></div>
+<div class="line">You need to install <a class="reference external" href="https://github.com/aws/aws-cli">aws-cli</a>:</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv venv-aws-cli # create a virtual environment</span>
+<span class="go">source ./venv-aws-cli/bin/activate # activate it</span>
+<span class="go">pip install --upgrade pip # upgrade pip</span>
+<span class="go">pip install awscli</span>
+</pre></div>
+</div>
+<p>And download a stereo:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">aws s3 cp --no-sign-request s3://spacenet-dataset/Hosted-Datasets/MVS_dataset/WV3/PAN/18DEC15WV031000015DEC18140522-P1BS-500515572020_01_P001_________AAE_0AAAAABPABJ0.NTF .</span>
+<span class="go">aws s3 cp --no-sign-request s3://spacenet-dataset/Hosted-Datasets/MVS_dataset/WV3/PAN/18DEC15WV031000015DEC18140554-P1BS-500515572030_01_P001_________AAE_0AAAAABPABJ0.NTF  .</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="prepare-input-images">
+<h2>Prepare input images<a class="headerlink" href="#prepare-input-images" title="Link to this heading">¶</a></h2>
+<section id="make-input-roi-images">
+<span id="id1"></span><h3>Make input ROI images<a class="headerlink" href="#make-input-roi-images" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">cars-extractroi</span></code> script allows to extract region of interest from your image product.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: cars-extractroi [-h] -il [IL [IL ...]] -out OUT -bbx x1 y1 x2 y2</span>
+
+<span class="go">Helper to extract roi from bounding box</span>
+
+<span class="go">optional arguments:</span>
+<span class="go">  -h, --help         show this help message and exit</span>
+<span class="go">  -il [IL [IL ...]]  Image products</span>
+<span class="go">  -out OUT           Extracts directory</span>
+<span class="go">  -bbx x1 y1 x2 y2   Bounding box from two points (x1, y1) and (x2, y2)</span>
+</pre></div>
+</div>
+<section id="how-to-find-the-coordinates-of-the-bounding-box">
+<h4>How to find the coordinates of the bounding box ?<a class="headerlink" href="#how-to-find-the-coordinates-of-the-bounding-box" title="Link to this heading">¶</a></h4>
+<p>For example, if you have downloaded the maxar example data <a class="reference internal" href="#maxar-example-files"><span class="std std-ref">Maxar WorldView example files</span></a>, you are working in an area near to San Fernando in Argentina. Go to the website <a class="reference external" href="https://geojson.io/">geojson.io</a> in order to select your ROI:</p>
+<p><a class="reference internal" href="images/roi_san_fernando_argentina.jpg"><img alt="roisanfernando" src="images/roi_san_fernando_argentina.jpg" style="width: 60%;" /></a></p>
+<p>You can either select the upper left corner with the lower right corner (in red in the previous image):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cars-extractroi -il *.NTF -out ext_dir -bbx -58.5809 -34.4934 -58.5942 -34.4869</span>
+<span class="go">cars-starter -il ext_dir/*.tif -out out_dir &gt; config.json</span>
+<span class="go">cars config.json</span>
+</pre></div>
+</div>
+<p>or the lower left corner with the upper right corner (in purple in the previous image):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cars-extractroi -il *.NTF -out ext_dir -bbx -58.5809 -34.4869 -58.5942 -34.4934</span>
+<span class="go">cars-starter -il ext_dir/*.tif -out out_dir &gt; config.json</span>
+<span class="go">cars config.json</span>
+</pre></div>
+</div>
+<p>N.B.: Instead of using <code class="docutils literal notranslate"><span class="pre">cars-extractroi</span></code>, you can directly give the GeoJson dictionnary in the configuration file (Please, see <span class="xref std std-ref">basic configuration</span> for details). In this case, the sparse steps (geometric corrections) are processed on the entire image and not only on the ROI.</p>
+</section>
+</section>
+<section id="monitor-tiles-progression">
+<h3>Monitor tiles progression<a class="headerlink" href="#monitor-tiles-progression" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">cars-dashboard</span></code> script allows to monitor the progression of tiles computation on a web browser.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">usage: cars-dashboard [-h] -out OUT</span>
+
+<span class="go">Helper to monitor tiles progress</span>
+
+<span class="go">optional arguments:</span>
+<span class="go">-h, --help  show this help message and exit</span>
+<span class="go">-out OUT    CARS output folder to monitor</span>
+</pre></div>
+</div>
+<p>For example, if you want to monitor the computation of a CARS run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cars-dashboard -out output_cars</span>
+</pre></div>
+</div>
+</section>
+<section id="make-a-simple-pan-sharpening">
+<span id="id2"></span><h3>Make a simple pan sharpening<a class="headerlink" href="#make-a-simple-pan-sharpening" title="Link to this heading">¶</a></h3>
+<p>In the case of Pleiades sensors, the XS color isn’t superimposable to the Panchromatic image.</p>
+<p>It can be recommended to apply a P+XS pansharpening with <a class="reference external" href="https://www.orfeo-toolbox.org/CookBook-8.0/C++/UserGuide.html#image-data-representation">OTB</a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">otbcli_BundleToPerfectSensor -inp image.tif -inxs color.tif -out color_pxs.tif</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker run -w /data -v &quot;$(pwd)&quot;/data:/data --entrypoint=/bin/bash  cnes/cars otbcli_BundleToPerfectSensor -inp /data/image.tif -inxs /data/color.tif -out /data/color_pxs.tif</span>
+</pre></div>
+</div>
+</section>
+<section id="convert-rgb-image-to-panchromatic-image">
+<h3>Convert RGB image to panchromatic image<a class="headerlink" href="#convert-rgb-image-to-panchromatic-image" title="Link to this heading">¶</a></h3>
+<p>CARS only uses panchromatic images for processing.</p>
+<p>If you have a multi-spectral image, you’ll need to extract a single band to use, or convert it to a panchromatic image before using it with CARS.</p>
+<p>The line below use <a class="reference external" href="https://en.wikipedia.org/wiki/Grayscale#Luma_coding_in_video_systems">“Grayscale Using Luminance”</a> expression with <a class="reference external" href="https://www.orfeo-toolbox.org/CookBook/Applications/app_BandMath.html">OTB BandMath</a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">otbcli_BandMath -il image.tif -out image_panchromatic.tif -exp &quot;(0.2126 * im1b1 + 0.7152 * im1b2 + 0.0722 * im1b3)&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="make-a-water-mask">
+<span id="id3"></span><h3>Make a water mask<a class="headerlink" href="#make-a-water-mask" title="Link to this heading">¶</a></h3>
+<p>To produce a water mask from R,G,B,NIR images, it can be recommended to compute a Normalized Difference Water Index (NDWI) and threshold the output to a low value.</p>
+<p>The low NDWI values can be considered as water area.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">gdal_calc.py -G input.tif --G_band=2 -N input.tif --N_band=4 --outfile=mask.tif --calc=&quot;((1.0*G-1.0*N)/(1.0*G+1.0*N))&gt;0.3&quot; --NoDataValue=0</span>
+</pre></div>
+</div>
+<p>It is also possible to produce a water mask with <a class="reference external" href="https://github.com/CNES/slurp">SLURP</a>.</p>
+<p>See next section to apply a gdal_translate to convert the mask with 1bit image struture.</p>
+</section>
+<section id="convert-image-to-binary-image">
+<span id="id4"></span><h3>Convert image to binary image<a class="headerlink" href="#convert-image-to-binary-image" title="Link to this heading">¶</a></h3>
+<p>To translate single image or multiband image with several nbits per band to 1bit per band, it can be recommended to use <a class="reference external" href="https://gdal.org/en/latest/programs/gdal_translate.html">gdal_translate</a> as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">gdal_translate -ot Byte -co NBITS=1 mask.tif mask_1nbit.tif</span>
+</pre></div>
+</div>
+</section>
+<section id="add-band-name-description-in-tif-files-metadata">
+<span id="add-band-description-in-image"></span><h3>Add band name / description in TIF files metadata<a class="headerlink" href="#add-band-name-description-in-tif-files-metadata" title="Link to this heading">¶</a></h3>
+<p>To add a band name / description (“water”, “cloud”, etc.) in TIF files, for classification or color files in order to be used:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_in</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_Update</span><span class="p">)</span>
+<span class="n">band_in</span> <span class="o">=</span> <span class="n">data_in</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">inband</span><span class="p">)</span>
+<span class="n">band_in</span><span class="o">.</span><span class="n">SetDescription</span><span class="p">(</span><span class="n">band_description</span><span class="p">)</span>
+<span class="n">data_in</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="get-low-resolution-dem">
+<span id="download-srtm-tiles"></span><h2>Get low resolution DEM<a class="headerlink" href="#get-low-resolution-dem" title="Link to this heading">¶</a></h2>
+<section id="srtm-90m-dem">
+<h3>SRTM 90m DEM<a class="headerlink" href="#srtm-90m-dem" title="Link to this heading">¶</a></h3>
+<p>It is possible to download a low resolution DEM (90-m SRTM) corresponding to your area. To get a SRTM tile, you need to run the following python script knowing the latitude and the longitude of your area:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">get_srtm_tif_name</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download srtm tiles&quot;&quot;&quot;</span>
+    <span class="c1"># longitude: [1, 72] == [-180, +180]</span>
+    <span class="n">tlon</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">lon</span><span class="o">+</span><span class="mi">180</span><span class="p">)</span><span class="o">/</span><span class="mi">5</span><span class="p">))</span> <span class="o">%</span> <span class="mi">72</span>
+    <span class="n">tlon</span> <span class="o">=</span> <span class="mi">72</span> <span class="k">if</span> <span class="n">tlon</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">tlon</span>
+
+    <span class="c1"># latitude: [1, 24] == [60, -60]</span>
+    <span class="n">tlat</span> <span class="o">=</span> <span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="mi">60</span><span class="o">-</span><span class="n">lat</span><span class="p">)</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">tlat</span> <span class="o">=</span> <span class="mi">24</span> <span class="k">if</span> <span class="n">tlat</span> <span class="o">==</span> <span class="mi">25</span> <span class="k">else</span> <span class="n">tlat</span>
+
+    <span class="n">srtm</span> <span class="o">=</span> <span class="s2">&quot;https://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_</span><span class="si">%02d</span><span class="s2">_</span><span class="si">%02d</span><span class="s2">.zip&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tlon</span><span class="p">,</span> <span class="n">tlat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">srtm</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Get SRTM tile corresponding to latitude and longitude couple&quot;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt; Latitude? &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt; Longitude? &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt; SRTM filename:&quot;</span><span class="p">,</span> <span class="n">get_srtm_tif_name</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">lat</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">lon</span><span class="p">)))</span>
+        <span class="nb">input</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If your area intersects multiple latitudes and longitudes, get all the SRTM tiles and create a VRT from them:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">gdalbuildvrt srtm.vrt srtm_tile1.tif srtm_tile2.tif</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="post-process-output">
+<h2>Post process output<a class="headerlink" href="#post-process-output" title="Link to this heading">¶</a></h2>
+<section id="merge-laz-files">
+<span id="id5"></span><h3>Merge Laz files<a class="headerlink" href="#merge-laz-files" title="Link to this heading">¶</a></h3>
+<p>CARS generates several <a class="reference external" href="https://docs.fileformat.com/gis/laz/">laz files</a> corresponding to the tiles processed.</p>
+<p>To merge them:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">laszip -i data\*.laz -merged -o merged.laz</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Link to this heading">¶</a></h2>
+<p>A docker is available to use CARS and OTB applications.
+CARS is the docker entrypoint. To use otb, entrypoint must be specified.</p>
+<section id="use-cars-in-docker">
+<h3>Use CARS in docker<a class="headerlink" href="#use-cars-in-docker" title="Link to this heading">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker run -w /data -v &quot;$(pwd)&quot;/data_gizeh_small:/data cnes/cars /data/configfile.json</span>
+</pre></div>
+</div>
+</section>
+<section id="use-otb-in-docker">
+<h3>Use OTB in docker<a class="headerlink" href="#use-otb-in-docker" title="Link to this heading">¶</a></h3>
+<p>Any OTB application can be ran in docker</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker run  --entrypoint=/bin/bash  cnes/cars otbcli_BandMath -help</span>
+</pre></div>
+</div>
+<p>You can either enter docker’s interactive mode or execute the program from outside of the docker, as explained right below (example for extract-roi):</p>
+</section>
+<section id="interactive-mode">
+<h3>Interactive mode:<a class="headerlink" href="#interactive-mode" title="Link to this heading">¶</a></h3>
+<p>You can enter in the docker interactive mode by using this command :</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker run -it -w /data -v &quot;$(pwd)&quot;/data_gizeh_small:/data  --entrypoint /bin/bash cnes/cars:latest</span>
+</pre></div>
+</div>
+<p>You are now in an interactive docker mode and you can launch your program as follow:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cars-extractroi /data/img1.tif -out crop_img1.tif  -bbx 20800 5100 21000 5300</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Explication</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>docker run</em></p></td>
+<td><p>Runs a container based on the cnes/cars:latest image.</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>-it</em></p></td>
+<td><p>Interactive mode (-i: interactive input, -t: allocates a pseudo-terminal).</p></td>
+</tr>
+<tr class="row-even"><td><p><em>-w /data</em></p></td>
+<td><p>Sets /data as the working directory inside the container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>-v “$(pwd)”/data_gizeh_small:/data</em></p></td>
+<td><p>Mounts the local data_gizeh_small folder to /data inside the container.</p></td>
+</tr>
+<tr class="row-even"><td><p><em>–entrypoint /bin/bash</em></p></td>
+<td><p>Overrides the container’s default entrypoint to run /bin/bash instead.</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>cnes/cars:latest</em></p></td>
+<td><p>Uses the cnes/cars:latest Docker image containing cars-extractroi.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="from-outside">
+<h3>From outside<a class="headerlink" href="#from-outside" title="Link to this heading">¶</a></h3>
+<p>The other option is to directly use this complete command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker run  -w /data -v &quot;$(pwd)&quot;/data_gizeh_small:/data  --entrypoint cars-extractroi cnes/cars:latest -il /data/img1.tif -out crop_img1.tif  -bbx 20800 5100 21000 5300</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="resample-an-image">
+<span id="resample-image"></span><h2>Resample an image<a class="headerlink" href="#resample-an-image" title="Link to this heading">¶</a></h2>
+<p>If you want to upscale or downscale the resolution of you input data, use rasterio:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">from</span> <span class="nn">rasterio.enums</span> <span class="kn">import</span> <span class="n">Resampling</span>
+<span class="c1"># Get data</span>
+<span class="n">upscale_factor</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;example.tif&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="c1"># resample data to target shape</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+        <span class="n">out_shape</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">upscale_factor</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">upscale_factor</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">resampling</span><span class="o">=</span><span class="n">Resampling</span><span class="o">.</span><span class="n">bilinear</span>
+    <span class="p">)</span>
+    <span class="c1"># scale image transform</span>
+    <span class="n">transform</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">transform</span> <span class="o">*</span> <span class="n">dataset</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">profile</span>
+    <span class="c1"># Save data</span>
+    <span class="n">profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">width</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;resampled_example.tif&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+        <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">DocSphinxTest</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicles.html">Vehicles Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicles.html#abstractvehicle-class">AbstractVehicle Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicles.html#vehicle-class">Vehicle Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicles.html#car-class">Car Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicles.html#truck-class">Truck Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vehicles.html#motorcycle-class">Motorcycle Class</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, BG.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/howto.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
