@@ -1,0 +1,16 @@
+Metadata-Version: 2.2
+Name: POC-of-Sphinx
+Version: 0.1.0
+Summary: POC of Sphinx
+Author: Benjamin
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.12
+Requires-Dist: numpy==1.26.4
+Requires-Dist: pytest==7.0.1
+Dynamic: author
+Dynamic: classifier
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

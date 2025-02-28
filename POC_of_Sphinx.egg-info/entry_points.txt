@@ -1,0 +1,2 @@
+[console_scripts]
+vehicles = vehicles.main:main
