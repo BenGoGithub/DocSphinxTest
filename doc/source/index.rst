@@ -1,6 +1,10 @@
 Welcome to the Vehicle Documentation
 ====================================
 
+.. image:: _static/mon_image.png
+    :alt: GoCar
+    :align: center
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
