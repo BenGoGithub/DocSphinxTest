@@ -12,5 +12,5 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. image:: source/_static/mon_image.png
+.. image:: _static/mon_image.png
    :alt: GoCar
