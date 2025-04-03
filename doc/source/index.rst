@@ -5,6 +5,9 @@ Welcome to the Vehicle Documentation
     :alt: GoCar
     :align: center
 
+.. image:: _static/mon_image.png
+   :alt: GoCar
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -16,5 +19,3 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. image:: _static/mon_image.png
-   :alt: GoCar
