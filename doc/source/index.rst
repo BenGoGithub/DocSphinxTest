@@ -7,3 +7,10 @@ Welcome to the Vehicle Documentation
 
 .. image:: /_static/mon_image.png
    :alt: GoCar
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
