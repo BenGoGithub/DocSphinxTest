@@ -5,12 +5,12 @@ Welcome to the Vehicle Documentation
    :maxdepth: 2
    :caption: Contents:
 
-.. image:: /_static/mon_image.png
-   :alt: GoCar
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+.. image:: /_static/mon_image.png
+   :alt: GoCar
